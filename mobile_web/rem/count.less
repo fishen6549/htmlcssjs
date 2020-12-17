@@ -1,0 +1,20 @@
+@baseFont: 50px;
+html {
+    font-size: @baseFont;
+}
+
+@border:5px + 5;
+div {
+    // 运算符左右需要两个空格的
+    width: 200px - 80;
+    height: 200px * 2;
+    border: @border solid red;
+    background-color: #666 - #444;
+} 
+
+img {
+    width: 82rem / @baseFont ;
+    height: 82rem / 50;
+}
+// 如果参与运算的只有一个单位那就按照这个单位为准
+// 如果有两个单位而且还不一样的话那就按照第一个单位为准

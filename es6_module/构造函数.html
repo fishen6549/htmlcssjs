@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Star(name, age) {
+            sex = '男';
+            this.name = name;
+            this.age = age;
+            // this.sing = function sing() {
+            //     console.log('我会唱歌');
+            // }
+        }
+        Star.prototype.sing = function sing() {
+            console.log('我会唱歌');
+        }
+        let p1 = new Star('ldh', 18);
+        let p2 = new Star('zxy', 18);
+        // console.log(p1);
+        // p1.sing();
+        // console.log(p1.sing === p2.sing); //true
+        // Star.sex = '男';
+        console.log(Star.sex); // 静态成员通过构造函数访问
+        console.log(p1.sex); //不能通过对象来访问
+        // console.dir(Star);
+        // console.log(p1.__proto__ === Star.prototype); //true
+
+    </script>
+</body>
+
+</html>

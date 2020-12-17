@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+        }
+    </style>
+</head>
+<body>
+    <button>点击动画</button>
+    <div></div>
+    <script src="jquery.min.js"></script>
+    <script>
+        
+        $(function(){
+          $('button').click(function(){
+              $('div').animate({
+                  top:500,
+                  left:300,
+                  opacity:.4,
+                  width:500
+              },500)
+          })
+        })
+    </script>
+</body>
+</html>

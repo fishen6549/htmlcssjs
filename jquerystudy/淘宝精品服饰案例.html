@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+       ul  {
+            list-style: none;
+        }
+
+        ul li {
+            border-right: 1px solid pink;
+            border-bottom: 1px solid pink;
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        ul li:hover {
+            background-color: cyan;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            display: block; 
+        }
+
+        #wapper {
+            display: flex;
+            width: 300px;
+            border: 1px solid pink;
+            overflow: hidden;
+        }
+
+        #content div {
+            display: none;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div id="wapper">
+        <ul class="left">
+            <li><a href="#">女靴</a></li>
+            <li><a href="#">雪地靴</a></li>
+            <li><a href="#">冬裙</a></li>
+            <li><a href="#">呢大衣</a></li>
+            <li><a href="#">毛衣</a></li>
+            <li><a href="#">棉服</a></li>
+            <li><a href="#">女裤</a></li>
+            <li><a href="#">羽绒服</a></li>
+            <li><a href="#">牛仔裤</a></li>
+        </ul>
+        <div id="content">
+            <div style="display: block;">女靴</div>
+            <div>雪地靴</div>
+            <div>冬裙</div>
+            <div>呢大衣</div>
+            <div>毛衣</div>
+            <div>棉服</div>
+            <div>女裤</div>
+            <div>羽绒服</div>
+            <div>牛仔裤</div>
+        </div>
+    </div>
+    <script src="jquery.min.js"></script>
+    <script>
+        
+        $(function(){
+            $('.left li').mouseover(function(){
+                let i = $(this).index()
+                console.log(i);
+                // $('#content div').eq(i).show()
+                // $('#content div').eq(i).siblings().hide()
+                $('#content div').eq(i).show().siblings().hide()
+            })
+        })
+    </script>
+</body>
+</html>

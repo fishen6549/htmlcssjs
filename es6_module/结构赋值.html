@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // let arr = [1, 2, 3];
+        // let [a, b, c] = arr;
+        // console.log(a);
+        // console.log(b);
+        // console.log(c);
+        let obj = { name: 'tom', age: 18 }
+        let { name: myname, sex: mysex, age: myage } = obj;
+        console.log(myname);
+        console.log(mysex);
+        console.log(myage);
+        // spred操作符
+        console.clear();
+        let post = {
+            id: 1,
+            title: '标题',
+            content: '文章内容',
+        };
+
+        let postClone = { ...post }; //克隆一个新的对象
+        console.log(postClone);
+        console.log(post === postClone);// false
+
+        let post2 = {
+            ...post,
+            author: 'potato'
+        };
+
+        console.log('post2', post2);// 增加了一个新的属性
+
+        let arr = [1, 2, 3];
+        let arrClone = [...arr];
+        console.log(arrClone);
+        console.log(arr === arrClone); // false
+
+        let arr2 = [...arr, 4, 5, 6]
+        console.log(arr2); //[1, 2, 3, 4, 5, 6]
+
+        // ------------------
+        function article(id, title, content) {
+            console.log(id, title, content);
+        }
+        article(...[1, '你好，世界', '文章内容']) //1 "你好，世界" "文章内容"
+
+        console.clear();
+        console.log(post);
+        // let { id, title } = post;
+        // let { title, id } = post; // 交换位置也没关系
+        // console.log(id, title); 用let定义的变量不能重复定义了
+
+        var { id, title: headLine } = post; // 可以取一个别名
+        console.log(id, headLine);
+
+        var { id, title, comments = '没有评论' } = post; //赋值默认值
+        console.log(id, title, comments);
+    </script>
+</body>
+
+</html>

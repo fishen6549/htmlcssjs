@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .father {
+            margin: 100px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            height: 400px;
+            background-color: pink;
+            text-align: center;
+        }
+
+        .son {
+            line-height: 200px;
+            width: 200px;
+            height: 200px;
+            background-color: purple;
+        }
+    </style>
+</head>
+<body>
+    <div class="father">
+        <div class="son">Son盒子</div>
+    </div>
+
+    <script>
+        var father = document.querySelector('.father')
+        var son = document.querySelector('.son')
+        // son.addEventListener('click',function(){
+        //     alert('son')
+        // },true)
+        // father.addEventListener('click',function(){
+        //     alert('father')
+        // },true)
+        son.addEventListener('click',function(e){
+            alert('son')
+            e.stopPropagation() 
+        })
+        father.addEventListener('click',function(){
+            alert('father')
+        })
+
+        document.addEventListener('click',function(){
+            alert('document')
+        })
+    </script>
+</body>
+</html>

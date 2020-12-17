@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .wrap {
+            width: 300px;
+            margin: 100px auto 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border: 1px solid #c0c0c0;
+            width: 300px;
+        }
+
+        th,
+        td {
+            border: 1px solid #d0d0d0;
+            color: #404060;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #09c;
+            font: bold 16px "微软雅黑";
+            color: #fff;
+        }
+
+        td {
+            font: 14px "微软雅黑";
+        }
+
+        tbody tr {
+            background-color: #f0f0f0;
+        }
+
+        tbody tr:hover {
+            cursor: pointer;
+            background-color: #fafafa;
+        }
+
+        .num {
+            width: 100%;
+            height: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .num input {
+            width: 40px;
+            height: 100%;
+            border-style: none;
+            outline: none;
+            text-align: center;
+        }
+
+        .num div {
+            width: 20px;
+            height: 20px;
+            /* border: 1px solid black; */
+            background-color: #f0f0f0;
+            line-height: 20px;
+            text-align: center;
+        }
+
+        .checked-cart-item {
+            background-color: #fff4e8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="j_cbAll" />
+                    </th>
+                    <th>商品</th>
+                    <th>价钱</th>
+                    <th>数量</th>
+                </tr>
+            </thead>
+            <tbody id="j_tb">
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>iPhone8</td>
+                    <td class="price">8000</td>
+                    <td>
+                        <div class="num">
+                            <div class="add">+</div>
+                            <input type="text" value="1">
+                            <div class="sub">-</div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>iPad Pro</td>
+                    <td class="price">5000</td>
+                    <td>
+                        <div class="num">
+                            <div class="add">+</div>
+                            <input type="text" value="1">
+                            <div class="sub">-</div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>iPad Air</td>
+                    <td class="price">2000</td>
+                    <td>
+                        <div class="num">
+                            <div class="add">+</div>
+                            <input type="text" value="1">
+                            <div class="sub">-</div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Apple Watch</td>
+                    <td class="price">2000</td>
+                    <td>
+                        <div class="num">
+                            <div class="add">+</div>
+                            <input type="text" value="1">
+                            <div class="sub">-</div>
+                        </div>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="display: flex;justify-content: space-between;">
+            <div>
+                <span>数量:</span><span class="select_nums">0</span>
+            </div>
+            <div>
+                <span>总计金额:</span><span class="total">0</span>
+            </div>
+        </div>
+    </div>
+    <script src="jquery.min.js"></script>
+    <script>
+
+        $(function () {
+            getSum();
+            $('#j_cbAll').change(function () {
+                let flag = $(this).prop('checked');
+                $('#j_tb input').prop('checked', flag)
+                if (flag) { $('#j_tb>tr').addClass('checked-cart-item') } else {
+                    $('#j_tb>tr').removeClass('checked-cart-item')
+                }
+
+                getSum()
+            })
+            $('#j_tb input[type=checkbox]').change(function () {
+                if ($('#j_tb input:checked').length === $('#j_tb input').length) {
+                    $('#j_cbAll').prop('checked', true)
+                } else {
+                    $('#j_cbAll').prop('checked', false)
+                }
+                if($(this).prop('checked')){
+                    $(this).parents('tr').addClass('checked-cart-item')
+                }else{
+                    $(this).parents('tr').removeClass('checked-cart-item')
+                }
+                getSum()
+            })
+            //点击加号增加数量
+            $('.add').click(function () {
+                let input = $(this).siblings('input')
+                let n = input.val()
+                // console.log(n);
+                n++;
+                input.val(n)
+                getSum();
+            })
+            //点击减号减少数量
+            $('.sub').click(function () {
+                let input = $(this).siblings('input')
+                let n = input.val()
+                console.log(typeof n);
+                if (n == 0) {
+                    return
+                }
+                n--;
+                input.val(n)
+                getSum();
+            })
+
+            //计算总计和总额方法
+            function getSum() {
+                let count = 0
+                let money = 0
+                let checked_index = []
+                $('#j_tb input[type=checkbox]').each(function (i, ele) {
+                    // console.log(ele.checked);
+                    if (ele.checked) {
+
+                        checked_index.push(i)
+                    }
+                })
+                $('.num input').each(function (i, ele) {
+                    if (checked_index.includes(i)) {
+                        // console.log('包含', i);
+                        _count = parseInt($(ele).val())
+                        count += _count
+                        money += parseInt($('.price').eq(i).text()) * _count
+                    }
+
+                    // console.log(parseInt($('price').eq(i).text())*_count)
+                })
+
+                $('.select_nums').text(count)
+                $('.total').text(money)
+                // console.log(count);
+                // console.log(money);
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+body {
+    min-width: 320px;
+    max-width: 750px; 
+    /* flexible给我划分了10等份数 */
+    width: 10rem;
+    margin: 0 auto;
+    line-height: 1.5;
+    font-family: Arial,Helvetica;
+    background: #F2F2F2;
+  }
+/* 因为flexible会根据屏幕的大小来划分rem值 是分成10份的
+但是如果我的设计稿是750px宽的话 那就需要媒体查询来设置好html的font-size
+而且还要提权 */
+@media screen and (min-width: 750px) {
+  html {
+    font-size: 75px!important;
+  }
+}
+.search-content {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10rem;
+  height: 1.173333rem;
+  background: #ffc001;
+}
+
+
+.classify {
+  width: .586667rem;
+  height: .933333rem;
+  background: url(../images/classify.png) no-repeat;
+  background-size: .586667rem .933333rem;
+  background-color: #fff;
+}
+

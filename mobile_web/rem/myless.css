@@ -1,0 +1,23 @@
+body {
+  background-color: coral;
+}
+div {
+  color: coral;
+}
+.header {
+  width: 200px;
+  height: 200px;
+  background-color: pink;
+}
+.header a {
+  color: orange;
+}
+.header a:hover {
+  color: cyan;
+}
+.nav .logo {
+  width: 200px;
+}
+.nav::before {
+  content: "";
+}

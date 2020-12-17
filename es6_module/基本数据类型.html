@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 小数 整数都是number类型
+        let age = 15;
+        console.log(typeof age);
+        age = '15';
+        console.log(typeof age);//动态的判断是什么类型
+        let res = 15 + 'hello';
+        console.log(res);
+        console.log(typeof res);
+
+        let strNum = '123';
+        console.log(strNum);
+        console.log(parseInt(strNum));
+        console.log(typeof NaN); //number类型
+
+        //一元操作符
+        let sNum = +'123';
+        console.log(sNum); //把字符串转换为number类型
+        //i++ 先返回再加一 ++i先加一再返回
+        //比较操作符 == 会根据类型做转换成相同的类型作值的比较
+        // === 值相同 类型相同才true
+        console.log(5 == 5);
+        console.log(5 == '5'); //true
+        console.log(5 === '5'); //false
+
+        console.log(undefined == null);//true
+        console.log(undefined === null);//false
+        //代表false的值有 false 0 ''（空的字符串 有空格都是true） null undefined NaN 都能转换成false
+
+    </script>
+</body>
+
+</html>

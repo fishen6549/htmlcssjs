@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #333;
+        }
+
+        .map {
+            position: relative;
+            margin: 0 auto;
+            width: 747px;
+            height: 617px;
+            background: url(./image/map.png) no-repeat;
+
+        }
+
+        .city {
+            position: absolute;
+            top: 227px;
+            right: 190px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #09f;
+        }
+
+        .city div[class^="pluse"] {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 11px 3px #009dfd;
+            animation: pluse 1.2s linear infinite;
+        }
+
+        .city div.pluse2 {
+            animation-delay: 0.4s;
+        }
+
+        .city div.pluse3 {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes pluse {
+            0% {}
+
+            70% {
+                width: 50px;
+                height: 50px;
+                opacity: 1;
+            }
+
+            100% {
+                width: 80px;
+                height: 80px;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="map">
+        <div class="city">
+            <div class="dot"></div>
+            <div class="pluse1"></div>
+            <div class="pluse2"></div>
+            <div class="pluse3"></div>
+        </div>
+    </div>
+</body>
+
+</html>

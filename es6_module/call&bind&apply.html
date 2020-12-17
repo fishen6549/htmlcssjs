@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let emp = {
+            id: 1,
+            name: 'potato',
+            dept: {
+                id: 23,
+                name: '技术部',
+                printInfo() {
+                    console.log(this);
+                    console.log(this.id, this.name);
+                }
+            },
+            printInfo() {
+                console.log(this);
+                console.log(this.id, this.name);
+            }
+        }
+        emp.printInfo();
+        emp.dept.printInfo(); //这里面的this其实都是.号左边的对象
+        // ------
+        function emp1(d1, d2, d3) {
+            console.log(this); //window对象
+            console.log('员工姓名', this.name, d1, d2, d3);
+        }
+        emp1(); // 员工姓名
+        emp1.call(emp, '技术部', '事业部', '测试部'); // 员工姓名 potato 绑定this指向是emp
+        // emp1.call(emp.dept); // 员工姓名 技术部 this指向是emp.dept
+        emp1.apply(emp, ['技术部', '事业部', '测试部']);//传入数组后立即执行
+        let emp2 = emp1.bind(emp, ['技术部', '事业部', '测试部']); // 返回新绑定的函数不会立即调用
+        emp2();
+    </script>
+</body>
+
+</html>

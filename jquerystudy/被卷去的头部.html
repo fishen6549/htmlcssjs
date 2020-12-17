@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            height: 2000px;
+        }
+
+        .content {
+            width: 50vw;
+            height: 900px;
+            margin: 400px auto;
+            background-color: pink;
+        }
+
+        .topbtn {
+            display: none;
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            right: 50px;
+            bottom: 100px;
+            background-color: orange;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+   <div class="content"></div>
+   <div class="topbtn">TOP</div>
+
+   <script src="./jquery.js"></script>
+   <script>
+       $(function(){
+           let boxTop = $('.content').offset().top
+           console.log(boxTop);
+           $(window).scroll(function(){
+               //console.log(e);
+               let top = $(document).scrollTop()
+               console.log(top);
+               if(top >= boxTop){
+                   console.log(top);
+                   $('.topbtn').stop().fadeIn()
+               } else {
+                $('.topbtn').stop().fadeOut()
+               }
+           })
+
+           $('.topbtn').on('click',function(){
+            // $(document).scrollTop(0) animate前面只能是元素 不能是文档
+            $('body,html').stop().animate({
+                scrollTop:0
+            },200)
+           })
+       })
+
+   </script>
+</body>
+</html>

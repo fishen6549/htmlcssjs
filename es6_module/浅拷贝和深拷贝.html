@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // let obj = { name: 'tom', id: 1 }
+        // let o = {}
+        // for (let k in obj) {
+        //     o[k] = obj[k];
+        // }
+        // console.log(o);
+        // console.log(o === obj);
+        let obj = { name: 'tom', id: 1, other: { hobby: 'sing' } }
+        let o = {}
+        for (let k in obj) { //浅拷贝只拷贝最外面一层
+            o[k] = obj[k];
+        }
+        console.log(o);
+        // console.log(o === obj);
+        console.log(o);
+        obj['other']['hobby'] = 'cook';
+    </script>
+</body>
+
+</html>

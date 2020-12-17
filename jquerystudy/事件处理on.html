@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+        }
+
+        .current{
+            background-color: orange;
+        }
+    </style>
+</head>
+
+<body>
+    <div></div>
+    <ol></ol>
+    <script src="./jquery.min.js"></script>
+    <script>
+        $(function () {
+            // $('div').on({
+            //     mouseenter: function () {
+            //         console.log('进入');
+            //     },
+            //     mouseleave: function () {
+            //         console.log('离开');
+            //     },
+            //     click: function () {
+            //         console.log('点击');
+            //     }
+            // })
+
+            //on 可以实现事件委托 把原来加给子元素身上的事件绑定在父元素身上
+            $('div').on('mouseleave mouseenter',function(){
+                $('div').toggleClass('current')
+            })
+
+            // on 可以给动态创建的元素绑定事件 这样可以
+            $('ol').on('click','li',function(){
+                console.log(this);
+            })
+                //这样不行
+            // $('ol li').on('click',function(){
+            //     console.log(this);
+            // })
+
+            $('ol').append($('<li>123</li>'))
+
+        })
+    </script>
+</body>
+
+</html>

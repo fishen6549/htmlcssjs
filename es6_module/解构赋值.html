@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var [a, b = 2] = [1];
+        console.log(a, b);
+
+        var post = {
+            id: 1,
+            title: '标题',
+            comments: [
+                {
+                    id: 1,
+                    comment: '评论1'
+                },
+                {
+                    id: 2,
+                    comment: '评论2'
+                },
+                {
+                    id: 3,
+                    comment: '评论3'
+                }
+            ]
+        }
+
+        var { comments: [, { comment },] } = post;//复杂一点
+        console.log(comment);
+        var { comments: [, { comment: word },] } = post;
+        console.log(word);
+
+        function getId(key, obj) {
+            let { [key]: id } = obj; //这样是可以取出value值的
+            // let { key: id } = obj; //这样不能
+            return id;
+        }
+        console.log(getId('userId', { userId: 2 }));// 2
+
+        var { comments, ...rest } = post;
+        console.log(comments);
+        console.log(rest); //把剩下的键值对分开来了
+
+        function savePost({ id, title, comments, ...rest }) { //函数的参数对象解构分别来取出内容
+            console.log(id, title, comments);
+            console.log(rest);
+        }
+
+        savePost(post);
+        savePost({ id: 3, title: 'potato', comments: '一条评论', author: 'banana', position: 'shanghai' });
+    </script>
+</body>
+
+</html>

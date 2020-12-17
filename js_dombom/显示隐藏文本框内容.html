@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        input {
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" value="手机">
+    <script>
+        let text = document.querySelector('input');
+        text.onfocus = function () {
+            console.log('得到了焦点');
+        }
+        text.onblur = function () {
+            console.log('失去了焦点');
+        }
+
+    </script>
+</body>
+
+</html>

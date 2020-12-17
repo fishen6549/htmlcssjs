@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // var name = 'the window';
+        // var myobj = {
+        //     name: 'my object',
+        //     myfun: function () {
+        //         var that = this;
+        //         return function () {
+        //             // console.log(this);
+        //             console.log(that);
+        //             return that.name;
+        //         }
+        //     }
+        // }
+        // console.log(myobj.myfun()());
+        // function fn() {
+        //     console.log(this);
+        //     return () => {
+        //         console.log(this);
+        //     }
+        // }
+
+        // let obj = { name: 'tom' };
+        // let fres = fn.call(obj);
+        // fres();
+
+
+        var information = {
+            name: "alan",
+            age: "18",
+            all: function () {
+                return this.name + " " + this.age; //alan 18 
+            }
+        };
+        let age = 100;
+        var info = {
+            name: 'tom',
+            age: '20',
+            all: () => {
+                return this.name + " " + this.age; // undefined
+            }
+        }
+
+        console.log(information.all());
+        console.log(info.all());
+
+
+
+    </script>
+</body>
+
+</html>

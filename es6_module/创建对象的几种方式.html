@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1.字面量创建对象
+        let employee = {
+            name: 'tom',
+            age: 18,
+            play: function () {
+                console.log(this.name, '唱歌');
+            }
+        }
+        employee.play();
+        // 2.使用object创建对象
+        let employee1 = new Object();
+        employee1.name = 'jerry';
+        employee1.age = 20
+        employee1.play = function () {
+            console.log(this.name, '做饭');
+        }
+        console.log(employee1.name);
+        employee1.play();
+
+        // 省略key的写法，如果值是一个变量，key跟这个变量同名可以直接写这个变量名字
+        // 还可以省略写function的key
+        let name = 'potato';
+        let employee2 = {
+            name, //name: name
+            play() {
+                console.log(this.name, '编程');
+            }
+
+            //play: function() {
+            // console.log(this.name, '编程');
+            // }
+        }
+        console.log(employee2.name);
+        employee2.play()
+        // ----------------
+        console.log(Object.keys(employee));
+        delete employee.age
+        console.log(Object.keys(employee));
+        //-----------------
+        // 3.使用构造函数创建对象 图纸Prototype -> 工厂构造函数 -> 实例
+        // 首字母大写
+        function Employee(name, job) {
+            this.name = name;
+            this.job = job;
+        }
+
+        let emp1 = new Employee('orange', '前端工程师');
+        console.log(emp1.name);
+        console.log(emp1.job);
+        let emp2 = new Employee('banana', '后端工程师');
+        console.log(emp2.name);
+        console.log(emp2.job);
+
+        //----------------- 
+        //字面值创建的对象本身就是一个具体的实例
+        let emp3 = {
+            name: '李四',
+            job: '测试工程师',
+            singIn() {
+                console.log(this.name, '上班打卡');
+            }
+        }
+        emp3.singIn();
+        // emp3.goToWork = function () {
+        //     console.log(this.name, '去上班');
+        // }
+        // emp3.goToWork();
+
+        emp3.goToWork = () => {
+            console.log(this.name, '去上班'); //name访问不到
+            console.log(this); // Window对象 箭头函数的this指向的是包裹它的作用域的对象 这里没有包裹它的作用域 那么this指代是global作用域this 在浏览器运行环境下 它就是window对象
+            //当然箭头函数不适合做对象的函数定义
+        }
+        emp3.goToWork();
+
+        function Emp(name, job) {
+            this.name = name;
+            this.job = job;
+            this.singIn = () => { // 这个this访问的是对象本身 所以可以访问到name
+                console.log(this.name, '去上班');
+            }
+        }
+
+        let emp4 = new Emp('王五', '前端工程师');
+        emp4.singIn();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="www.potato.com" title="apple">123</a>
+    <div index="123123"></div>
+    <span>89889890</span>
+    <script src="jquery.min.js"></script>
+    <script>
+
+        $(function () {
+            console.log($('a').prop('href'))
+            $('a').prop('title','hello')
+            //获取自定义属性
+            console.log($('div').attr('index'));
+            $('div').attr('index',9090)
+            //数据缓存
+
+        })
+    </script>
+</body>
+
+</html>
