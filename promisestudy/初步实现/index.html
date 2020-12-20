@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="promise.js"></script>
+</head>
+
+<body>
+    <script>
+        /*
+        resolve通知回调函数开始执行,考虑同步执行还是异步执行
+        有异步任务的时候 到then的时候执行状态是pending所以会把回调函数先保存起来
+        没有异步任务的时候 到then就不是pending了 就可以直接拿到结果 执行函数
+        */
+        let p = new Promise((resolve, reject) => {
+            // resolve('Ok!')
+            //reject('error')
+            // console.log(this);
+            //throw 'error';
+            setTimeout(() => {
+                resolve('ok')
+                 //reject('error')
+            }, 1000)
+        })
+
+        const res = p.then(value => {
+            // return 'hello world' + value
+            // return new Promise((res,rej) => {
+            //     res('成功了')
+            // })
+            //throw 'Error'
+            console.log(value);
+        }, reason => {
+            console.log(reason);
+        })
+        // p.then(value => {
+        //     alert(value);
+        // }, reason => {
+        //     alert(reason);
+        // })
+        // console.log(p);
+        console.log(res);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="promise.js"></script>
+</head>
+
+<body>
+
+    <script>
+        // 1个失败就返回一个失败的结果了  promise的传入的函数也是异步的
+        const p = new Promise((resolve,reject)=>{
+                resolve()
+                console.log('111');
+        })
+
+        p.then(r=>{
+            console.log('222');
+        })
+
+        // const res = Promise.all([p,p2,p3])
+        // const res = Promise.race([p,p2,p3])
+        console.log('333');
+    </script>
+</body>
+
+</html>

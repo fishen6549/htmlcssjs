@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Star(name, age) {
+            this.name = name
+            this.age = age
+        }
+
+        // prototype里面有一个constructor属性指向原来的构造函数Star
+        Star.prototype.sing = function () {
+            console.log('我会唱歌');
+        }
+
+        Star.prototype.movie = function () {
+            console.log('我会电影');
+        }
+
+        console.log(Star.prototype)
+        //可以覆盖掉原来的原型对象
+        Star.prototype = {
+            constructor: Star,//找到原来的对象
+            sing: function () {
+                console.log('我会唱歌');
+            },
+            movie: function () {
+                console.log('我会电影');
+            }
+        }
+
+        let ldh = new Star('刘德华', 19)
+        let zxy = new Star('张学友', 20)
+    </script>
+</body>
+
+</html>
