@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #canvas {
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="500" height="600"></canvas>
+    <script>
+        /**@type {HTMLCanvasElement}*/
+        const canvas = document.querySelector('#canvas')
+        const c = canvas.getContext('2d')
+        let pos = []
+
+        // canvas.addEventListener('click', function (e) {
+        //     console.log(e);
+        //     pos.push({ x: e.clientX, y: e.clientY })
+        //     if (pos.length === 2) {
+        //         c.strokeRect(pos[0].x, pos[0].y, pos[1].x - pos[0].x, pos[1].y - pos[0].y)
+        //         console.log(pos);
+        //         pos = []
+        //     }
+        // })
+
+        canvas.addEventListener('mousedown', function (e) {
+            let x = e.pageX
+            let y = e.pageY
+            document.addEventListener('mousemove', function (e) {
+                c.strokeRect(x, y, e.pageX - x, e.pageY - y)
+                c.clearRect(x, y, e.pageX - x, e.pageY - y)
+            })
+        })
+        c.save()
+        c.moveTo(50, 50)//移动画笔
+        c.lineTo(50, 150)//画直线
+        c.lineTo(150, 150)
+        c.lineTo(50, 50)
+        c.stroke()//直线绘制操作
+
+        //绘制圆弧
+        c.beginPath()//新建路径
+        c.arc(200, 200, 50, 0, 2 * Math.PI)
+        c.stroke()
+        //绘制圆弧
+        c.beginPath()
+        c.arc(200, 200, 60, 0, Math.PI, true)//true就是逆时针画 三点开始为0度 逆时针负数 顺时针正数
+        c.closePath()
+        c.stroke()
+        c.fill()
+
+        //绘制矩形
+        c.beginPath()
+        c.rect(200, 50, 50, 50)
+        c.stroke()
+
+        //绘制矩形 strokeRect fillRect
+        c.beginPath()
+        c.strokeRect(300, 300, 100, 100)//矩形框
+        c.fillRect(300, 400, 100, 100)//填充一个矩形 少一个边框
+
+        //样式
+        c.beginPath()
+        c.strokeStyle = '#f00'//线的样式 红色
+        c.strokeRect(350, 350, 50, 50)
+        c.fillStyle = 'blue'//填充样式 蓝色
+        c.fillRect(300, 300, 50, 50)
+
+        //场景的保存和恢复 save restore
+        c.restore()
+        c.arc(200, 300, 50, 0, Math.PI * 2)
+        c.stroke()
+        c.fillRect(200, 400, 100, 100)
+
+        //尝试负数
+        c.strokeRect(100, 300, 100, 100)
+        c.strokeRect(100, 300, -50, -50)
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -191,3 +191,50 @@ header .showTime {
   background: url(../img/map.png);
   background-size: 100% 100%;
 }
+.mainbox .map .map2 {
+  width: 8.0375rem;
+  height: 8.0375rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url(../img/lbx.png);
+  background-size: 100% 100%;
+  animation: map2move 15s linear infinite;
+}
+.mainbox .map .map3 {
+  z-index: 999;
+  width: 7.075rem;
+  height: 7.075rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url(../img/jt.png);
+  background-size: 100% 100%;
+  opacity: 0.6;
+  animation: map3move 15s linear infinite;
+}
+.mainbox .map .chart {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+@keyframes map2move {
+  form {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes map3move {
+  form {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}

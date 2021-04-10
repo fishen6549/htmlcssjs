@@ -220,18 +220,63 @@
             background-size: 100% 100%;
         }
 
-        // .map1 {
-        //     width: 6.475rem;
-        //     height: 6.475rem;
-        //     position: absolute;
-        //     top: 0;
-        //     left: 0;
-        //     right: 0;
-        //     bottom: 0;
-        //     margin: auto;
-        //     background: url(../img/map.png);
-        //     background-size: 100% 100%;
-        // }
+        .map2 {
+            width: 8.0375rem;
+            height: 8.0375rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background: url(../img/lbx.png);
+            background-size: 100% 100%;
+            animation: map2move 15s linear infinite;
+        }
+
+        .map3 {
+            z-index: 999;
+            width: 7.075rem;
+            height: 7.075rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background: url(../img/jt.png);
+            background-size: 100% 100%;
+            opacity: 0.6;
+            animation: map3move 15s linear infinite;
+        }
+
+        .chart {
+            position: absolute;
+            left: 0;
+            top: 0;
+            // background-color: pink;
+            width: 100%;
+            height: 100%;
+        }
+
+
+
+        @keyframes map2move {
+           form {
+               transform: translate(-50%,-50%) rotate(0deg);
+           }
+
+           to {
+                transform: translate(-50%,-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes map3move {
+            form {
+                transform: translate(-50%,-50%) rotate(0deg);
+            }
+ 
+            to {
+                 transform: translate(-50%,-50%) rotate(-360deg);
+             }
+         }
+
     }
   }
   

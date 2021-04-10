@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>熟悉 ZRender API </title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #main {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 容器 -->
+    <div id="main"></div>
+    <!-- 引入zrender -->
+    <script src="https://cdn.bootcss.com/zrender/4.0.7/zrender.min.js"></script>
+    <script>
+        //初始化一个实例
+        var zr = zrender.init(document.getElementById('main'), {
+            renderer: 'canvas',       //渲染方式 支持'canvas','svg','vml'
+            devicePixelRatio: 1,      //画布大小与容器大小之比，仅当 renderer 为 'canvas' 时有效
+            width: 'auto',            //画布宽度
+            height: 'auto'            //画布高度
+        });
+
+        //这里练习代码
+        var rect = new zrender.Rect({
+            style: {
+                fill: 'red',      //填充颜色
+                stroke: 'none'    //描边颜色
+            },
+            shape: {
+                x: 100,           //x,y代表坐标
+                y: 100,
+                width: 200,
+                height: 100,
+                r: [3]            //圆角
+            },
+            z: 1                   //层次，大的会覆盖小的
+        });
+        zr.add(rect);
+
+        //点击事件
+        rect.on('click', function (e) {
+            console.log('点击了矩形')
+            rect.attr({
+                style: {
+                    fill: 'yellow'
+                },
+                shape: {
+                    width: 300,
+                    height: 200
+                }
+            })
+
+            rect.animate('shape', true)
+                .when(1000, { x: 100 })
+                .when(2000, { x: 0 })
+                .when(3000, { y: 100 })
+                .when(4000, { y: 0 })
+                .start();
+
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>

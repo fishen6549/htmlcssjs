@@ -38,16 +38,17 @@
         // father.addEventListener('click',function(){
         //     alert('father')
         // },true)
-        son.addEventListener('click',function(e){
-            alert('son')
-            e.stopPropagation() 
-        })
-        father.addEventListener('click',function(){
-            alert('father')
-        })
+        // son.addEventListener('click',function(e){
+        //     alert('son')
+        //     // e.stopPropagation() 
+        // })
+        // father.addEventListener('click',function(){
+        //     alert('father')
+        // })
 
-        document.addEventListener('click',function(){
+        document.addEventListener('click',function(e){
             alert('document')
+            console.log(e.target.nodeName);
         })
     </script>
 </body>
