@@ -2,10 +2,14 @@ const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
 
+
+
 const statusConfig = {
     IDLE: 0,
     DRAG_START: 1,
-    DRAGGING: 2
+    DRAGGING: 2,
+    MOVE_START: 3,
+    MOVING: 4
 }
 
 const canvasInfo = {
@@ -13,6 +17,7 @@ const canvasInfo = {
     dragTarget: null,
     lastEvtPos: { x: null, y: null },
     lastEvtOffset: { x: null, y: null },
+    offsetMouseEvtPos: { x: null, y: null },
     offset: { x: 0, y: 0 },
     scale: 1,
     scaleStep: 0.1,
@@ -44,17 +49,18 @@ circles.push({
 })
 
 
-// const getCanvasPosition = (e) => {
-//     return {
-//         x: e.offsetX,
-//         y: e.offsetY
-//     }
-// }
 
 const getCanvasPosition = (e, offset = { x: 0, y: 0 }, scale = 1) => {
     return {
         x: (e.offsetX - offset.x) / scale,
         y: (e.offsetY - offset.y) / scale
+    }
+}
+
+const getMousePosition = e => {
+    return {
+        x: e.offsetX,
+        y: e.offsetY
     }
 }
 
@@ -78,18 +84,29 @@ renderCircle = () => {
     for (let i = 0; i < circles.length; i++) {
         drawCricle(ctx, circles[i].x, circles[i].y, circles[i].r)
     }
+
 }
+
+
+canvas.addEventListener('contextmenu', e => {
+    e.preventDefault()
+})
 
 
 canvas.addEventListener('mousedown', e => {
     const pos = getCanvasPosition(e, canvasInfo.offset, canvasInfo.scale)
     const circle = ifInCircle(pos)
-
-    if (circle) {
-        canvasInfo.dragTarget = circle
-        canvasInfo.status = statusConfig.DRAG_START
-        canvasInfo.lastEvtPos = pos
-        canvasInfo.lastEvtOffset = pos
+    if (e.button === 0) {
+        if (circle) {
+            canvasInfo.dragTarget = circle
+            canvasInfo.status = statusConfig.DRAG_START
+            canvasInfo.lastEvtPos = pos
+            canvasInfo.lastEvtOffset = pos
+        }
+    } else if (e.button === 2) {
+        console.log(e);
+        canvasInfo.status = statusConfig.MOVE_START
+        canvasInfo.offsetMouseEvtPos = getMousePosition(e)
     }
 })
 
@@ -112,13 +129,25 @@ canvas.addEventListener('mousemove', e => {
         dragTarget.y += pos.y - canvasInfo.lastEvtOffset.y
         renderCircle()
         canvasInfo.lastEvtOffset = pos;
+    } else if (canvasInfo.status === statusConfig.MOVE_START && getDistance(pos, canvasInfo.lastEvtPos) > 5) {
+        console.log('moving start');
+        canvasInfo.status = statusConfig.MOVING
+        canvasInfo.offsetMouseEvtPos = getMousePosition(e)
+    } else if (canvasInfo.status === statusConfig.MOVING) {
+        console.log('moving canvas');
+        const mousePos = getMousePosition(e)
+        canvasInfo.offset.x += mousePos.x - canvasInfo.offsetMouseEvtPos.x
+        canvasInfo.offset.y += mousePos.y - canvasInfo.offsetMouseEvtPos.y
+        ctx.setTransform(canvasInfo.scale, 0, 0, canvasInfo.scale, canvasInfo.offset.x, canvasInfo.offset.y)
+        renderCircle()
+        canvasInfo.offsetMouseEvtPos = mousePos
     }
     // console.log('拖拽move');
 })
 
 
 canvas.addEventListener('mouseup', e => {
-    if (canvasInfo.status === statusConfig.DRAGGING) {
+    if (canvasInfo.status === statusConfig.DRAGGING || canvasInfo.status === statusConfig.MOVING) {
         canvasInfo.status = statusConfig.IDLE
     }
 })
