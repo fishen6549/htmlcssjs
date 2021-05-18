@@ -2,7 +2,25 @@ const canvas = document.querySelector('#canvas')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
+const src = './img/timg.jpg'
+
 const ctx = canvas.getContext('2d')
+
+const img = new Image()
+img.onload = () => {
+    // console.log(img);
+    // console.log(img.width, img.height);
+    // console.dir(img);
+    imgInfo.width = img.width
+    imgInfo.height = img.height
+    imgInfo.originalWidth = img.width
+    imgInfo.originalHeight = img.height
+    imgInfo.x = 0
+    imgInfo.y = 0
+    fitZoom(img)
+    ctx.drawImage(img, 0, 0, imgInfo.originalWidth, imgInfo.originalHeight, 0, 0, imgInfo.width, imgInfo.height)
+}
+img.src = src
 
 let lineWidth = 2, radius = 4, cursorStr = ''
 
@@ -28,11 +46,19 @@ const canvasInfo = {
     offset: { x: 0, y: 0 },
     canvasMouseOffset: { x: null, y: null },
     scale: 1,
+    preScale: 1,
     scaleStep: 0.1,
-    maxScale: 2,
-    minScale: 0.5
+    maxScale: 5,
+    minScale: 0.1
 }
-
+const imgInfo = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    originalWidth: 0,
+    originalHeight: 0
+}
 const rects = []
 
 const getCanvasPosition = (e, offset = { x: 0, y: 0 }, scale = 1) => {
@@ -49,78 +75,73 @@ const getMousePosition = e => {
     }
 }
 
-const zoom = (number) => {
-    return Math.floor(number * canvasInfo.scale)
+const fitZoom = (img) => {
+    const ratio = img.width / img.height
+
+    if (canvas.width > canvas.height) {
+        imgInfo.width = canvas.height * ratio
+        imgInfo.height = canvas.height
+    } else {
+        imgInfo.width = canvas.width
+        imgInfo.height = canvas.height * ratio
+    }
+    canvasInfo.scale = imgInfo.width / imgInfo.originalWidth
 }
 
-const zoomX = (number) => {
-    // debugger
-    // console.log(canvasX); x-offset.x
-    // return Math.floor((number - canvasX) * scale + screenX)
-    // return Math.floor((number - canvasInfo.canvasMouseOffset.x) * canvasInfo.scale + canvasInfo.offset.x)
-    return Math.floor((number - canvasInfo.canvasMouseOffset.x - canvasInfo.offset.x) * canvasInfo.scale + number)
-}
-
-const zoomY = (number) => {
-    // return Math.floor((number - canvasY) * scale + screenY)
-    // return Math.floor((number - canvasInfo.canvasMouseOffset.y) * canvasInfo.scale + canvasInfo.offset.y)
-    return Math.floor((number - canvasInfo.canvasMouseOffset.y - canvasInfo.offset.y) * canvasInfo.scale + number)
-}
 
 renderRect = () => {
-    // console.log(canvas.width, canvas.height);
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    const changeRect = canvasInfo.status === statusConfig.SCALE ? scaleRect : drawRect;
     for (let i = 0; i < rects.length; i++) {
-        // drawRect(ctx, circles[i].x, circles[i].y, circles[i].r)
-
-        // drawRect(rects[i])
-        changeRect(rects[i])
+        drawRect(rects[i])
     }
-    // debugger
-    // if (canvasInfo.dragTarget) {
-    //     drawRectBorder(canvasInfo.dragTarget)
-    // }
+
 }
+
+scaleRect = () => {
+    for (let i = 0; i < rects.length; i++) {
+        const rect = rects[i]
+        const realPos = {
+            x: canvasInfo.lastEvtPos.x - rect.x,//图形相对于鼠标的偏移数 
+            y: canvasInfo.lastEvtPos.y - rect.y
+        }
+        const offsetX = realPos.x * (canvasInfo.scale - canvasInfo.preScale) / canvasInfo.preScale
+        const offsetY = realPos.y * (canvasInfo.scale - canvasInfo.preScale) / canvasInfo.preScale
+        rect.x -= offsetX
+        rect.y -= offsetY
+        rect.width = rect.width * (canvasInfo.scale / canvasInfo.preScale)
+        rect.height = rect.height * (canvasInfo.scale / canvasInfo.preScale)
+    }
+    renderRect()
+}
+
+scaleImg = () => {
+    const realPos = {
+        x: canvasInfo.lastEvtPos.x - imgInfo.x,//图形相对于鼠标的偏移数 
+        y: canvasInfo.lastEvtPos.y - imgInfo.y
+    }
+    const offsetX = realPos.x * (canvasInfo.scale - canvasInfo.preScale) / canvasInfo.preScale
+    const offsetY = realPos.y * (canvasInfo.scale - canvasInfo.preScale) / canvasInfo.preScale
+    imgInfo.x -= offsetX
+    imgInfo.y -= offsetY
+    imgInfo.width = imgInfo.width * (canvasInfo.scale / canvasInfo.preScale)
+    imgInfo.height = imgInfo.height * (canvasInfo.scale / canvasInfo.preScale)
+    ctx.drawImage(img, 0, 0, imgInfo.originalWidth, imgInfo.originalHeight, imgInfo.x, imgInfo.y, imgInfo.width, imgInfo.height)
+}
+
+
 
 drawRect = (rect) => {
     ctx.save()
     ctx.beginPath()
-    // ctx.rect(rect.x, rect.y, rect.width, rect.height);
-    // ctx.stroke();
+
     ctx.fillStyle = "#FF7782"
     ctx.globalAlpha = 0.3
-    // ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
-    // let x = rect.x, y = rect.y, width = rect.width, height = rect.height
-    // if (canvasInfo.status === statusConfig.SCALE) {
-    //     x = zoomX(rect.x)
-    //     y = zoomY(rect.y)
-    //     width = zoom(rect.width)
-    //     height = zoom(rect.height)
-    // }
-    // let x = zoomX(rect.x)
-    // let y = zoomY(rect.y)
-    // let width = zoom(rect.width)
-    // let height = zoom(rect.height)
-    console.log(zoomX(rect.x), zoomY(rect.y), zoom(rect.width), zoom(rect.height));
-    // ctx.fillRect(zoomX(rect.x), zoomY(rect.y), zoom(rect.width), zoom(rect.height));
+
     ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
     ctx.closePath()
     ctx.restore()
 }
 
-scaleRect = (rect) => {
-    ctx.save()
-    ctx.beginPath()
-
-    ctx.fillStyle = "#FF7782"
-    ctx.globalAlpha = 0.3
-
-    console.log(zoomX(rect.x), zoomY(rect.y), zoom(rect.width), zoom(rect.height));
-    ctx.fillRect(zoomX(rect.x), zoomY(rect.y), zoom(rect.width), zoom(rect.height));
-    ctx.closePath()
-    ctx.restore()
-}
 
 const getPoint = (a, b, step) => [
     a - step,
@@ -150,8 +171,8 @@ drawRectBorder = (rect) => {
         { x: rect.x + rect.width, y: rect.y + rect.height }
     ]
     ctx.beginPath()
-    // ctx.rect(rect.x, rect.y, rect.width, rect.height);
-    ctx.rect(zoomX(rect.x), zoomY(rect.y), zoom(rect.width), zoom(rect.height));
+    ctx.rect(rect.x, rect.y, rect.width, rect.height);
+    // ctx.rect(zoomX(rect.x), zoomY(rect.y), zoom(rect.width), zoom(rect.height));
     ctx.strokeStyle = "#FF7782"
     ctx.lineWidth = lineWidth
     ctx.globalAlpha = 1
@@ -161,10 +182,10 @@ drawRectBorder = (rect) => {
     pointList.forEach(item => {
         ctx.beginPath()
         ctx.arc(
-            // item.x,
-            // item.y,
-            zoomX(item.x),
-            zoomY(item.y),
+            item.x,
+            item.y,
+            // zoomX(item.x),
+            // zoomY(item.y),
             radius,
             0,
             Math.PI * 2
@@ -254,16 +275,6 @@ changeCursor = (pos) => {
         }
     }
     document.body.style.cursor = 'auto'
-    // points.forEach(item => {
-    //     ctx.save()
-    //     ctx.beginPath()
-    //     ctx.fillStyle = "blue"
-    //     ctx.globalAlpha = 1
-    //     ctx.fillRect(item[0], item[1], item[2], item[3])
-    //     ctx.closePath()
-    //     ctx.restore()
-    //     if (pos.x > tLine[0])
-    // })
     // console.log(x, y, width, height)
     // ctx.save()
     // ctx.beginPath()
@@ -295,15 +306,8 @@ changeCursor1 = (pos) => {
     const yLine = getPoint(rect.y, rect.height, lineWidth)
     const xCircle = getPoint(rect.x, rect.width, radius)
     const yCircle = getPoint(rect.y, rect.height, radius)
-    // console.log(xLine, yLine, xCircle, yCircle);
-    // console.log(rect);
-    // r:right; l:left; t:top; b:bottom;
     const move =
         x > xLine[1] && x < xLine[2] && y > yLine[1] && y < yLine[2]
-    // const lLine = x > xLine[0] && x < xLine[1]
-    // const rLine = x > xLine[2] && x < xLine[3]
-    // const tLine = y > yLine[0] && y < yLine[1]
-    // const bLine = y > yLine[2] && y < yLine[3]
     const lLine = x > xLine[0] && x < xLine[1] && y > yLine[1] && y < yLine[2]
     const rLine = x > xLine[2] && x < xLine[3] && y > yLine[1] && y < yLine[2]
     const tLine = y > yLine[0] && y < yLine[1] && x > xLine[1] && x < xLine[2]
@@ -430,15 +434,12 @@ resizeRect = (pos, cursorStr) => {
 
 canvas.addEventListener('mousedown', e => {
     const pos = getMousePosition(e)
-    // console.log(pos);
-    // canvasInfo.dragTarget = inRect(pos)
     canvasInfo.status = statusConfig.DRAG_START
     canvasInfo.lastEvtPos = pos
     canvasInfo.lastEvtOffset = pos
-    // if (canvasInfo.dragType !== statusConfig.RESIZE_RECT) {
     canvasInfo.dragTarget = inRect(pos)
     changeCursor1(pos)
-    // }
+
     if (canvasInfo.dragTarget) {
         canvasInfo.dragType = statusConfig.MOVE_RECT;
     } else {
@@ -454,10 +455,7 @@ canvas.addEventListener('mousemove', e => {
         if (!canvasInfo.dragTarget) {
             return
         } else {
-            // changeCursor(pos)
-            // throttle(changeCursor)(pos)
             changeCursor1(pos)
-            // debounce(changeCursor)(pos)
         }
     } else if (canvasInfo.status === statusConfig.DRAG_START) {
         canvasInfo.status = statusConfig.DRAGGING
@@ -474,24 +472,23 @@ canvas.addEventListener('mousemove', e => {
                 canvasInfo.dragTarget = rect
             }
         } else if (canvasInfo.dragType === statusConfig.MOVE_RECT || canvasInfo.dragType === statusConfig.RESIZE_RECT) {
-            // canvasInfo.dragTarget.x += e.offsetX - canvasInfo.lastEvtPos.x
-            // canvasInfo.dragTarget.y += e.offsetY - canvasInfo.lastEvtPos.y
-            // canvasInfo.dragTarget.x += pos.x - canvasInfo.lastEvtOffset.x
-            // canvasInfo.dragTarget.y += pos.y - canvasInfo.lastEvtOffset.y
             changeCursor1(pos)
             resizeRect(pos, cursorStr)
             canvasInfo.lastEvtOffset = pos;
         }
         renderRect()
-        // console.log(rects);
     }
 })
 
 canvas.addEventListener('wheel', e => {
     e.preventDefault()
-    const pos = getCanvasPosition(e)
+    console.log(e);
+    canvasInfo.preScale = canvasInfo.scale
+    const pos = getMousePosition(e)
+    canvasInfo.lastEvtPos = pos
+    // const realPos = getMousePosition(e)
     canvasInfo.status = statusConfig.SCALE
-    const realPos = {//
+    realPos = {//
         x: pos.x - canvasInfo.offset.x,
         y: pos.y - canvasInfo.offset.y
     }
@@ -503,21 +500,29 @@ canvas.addEventListener('wheel', e => {
     const deltaX = Math.floor(realPos.x / canvasInfo.scale * scaleStep)
     const deltaY = Math.floor(realPos.y / canvasInfo.scale * scaleStep)
     // console.log('delteX', deltaX, 'deltaY', deltaY);
-    if (e.wheelDelta > 0 && canvasInfo.scale < canvasInfo.maxScale) {//缩小
-        console.log('up');
+    if (e.deltaY < 0 && canvasInfo.scale < canvasInfo.maxScale) {//放大
         canvasInfo.offset.x -= deltaX
         canvasInfo.offset.y -= deltaY
-        canvasInfo.scale += scaleStep
-        console.log(canvasInfo.offset);
-    } else if (e.wheelDelta <= 0 && canvasInfo.scale > canvasInfo.minScale) {//放大
-        console.log('down');
+        // canvasInfo.scale += scaleStep
+        canvasInfo.scale = parseFloat((canvasInfo.scale + canvasInfo.scaleStep).toFixed(2))
+        // console.log(canvasInfo.offset);
+        // canvasInfo.lastEvtPos = realPos
+        // scaleRect()
+        console.log(canvasInfo.scale);
+    } else if (e.deltaY >= 0 && canvasInfo.scale > canvasInfo.minScale) {//缩小
         canvasInfo.offset.x += deltaX
         canvasInfo.offset.y += deltaY
-        canvasInfo.scale -= scaleStep
-        console.log(canvasInfo.offset);
+        // canvasInfo.scale -= scaleStep
+        // canvasInfo.scale -= scaleStep
+        canvasInfo.scale = parseFloat((canvasInfo.scale - canvasInfo.scaleStep).toFixed(2))
+        // console.log(canvasInfo.offset);
+        console.log(canvasInfo.scale);
+        // canvasInfo.lastEvtPos = realPos
+        // scaleRect()
     }
-
-    renderRect()
+    scaleRect()
+    scaleImg()
+    canvasInfo.status = statusConfig.IDLE
     // ctx.setTransform(canvasInfo.scale, 0, 0, canvasInfo.scale, canvasInfo.offset.x, canvasInfo.offset.y)
     // renderCircle()
 
