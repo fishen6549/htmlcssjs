@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        width: 100%;
+        height: 100vh;
+        background-color: #efefef;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        background-color: #fff;
+    }
+
+    .submit {
+        display: flex;
+        height: 40px;
+    }
+
+    .submit input {
+        width: 80%;
+        outline: none;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .submit button {
+        width: 20%;
+        outline: 0;
+        border: 0;
+        color: #fff;
+        background: linear-gradient(45deg, #016eff 70%, #1296ea);
+        border: 1px solid #ccc;
+        border-left: 0;
+        cursor: pointer;
+    }
+
+    .submit .btn_active {
+        color: #ccc;
+        background: #efefef;
+        cursor: not-allowed;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <canvas width="600px" height="400px"></canvas>
+        <div class="submit">
+            <input placeholder="发个弹幕见证当下~" type="text">
+            <button>发送</button>
+        </div>
+    </div>
+
+    <script>
+        const input = document.querySelector('input')
+        const button = document.querySelector('button')
+        let second = 3
+        let yStep = [18, 36, 54]
+        let textList = []
+        button.addEventListener('click', e => {
+            if (button.className === 'btn_active') {
+                return
+            }
+            const text = input.value
+            if (text.trim() !== '') {
+                console.log(text);
+                input.value = ''
+                button.innerHTML = second + ' s'
+                button.className = 'btn_active'
+                const timer = setInterval(() => {
+                    second--;
+                    button.innerHTML = second + ' s'
+                    if (second === 0) {
+                        clearInterval(timer)
+                        second = 3
+                        button.innerHTML = '发送'
+                        button.className = ''
+                    }
+                }, 1000)
+            }
+
+            textList.push({
+                text: text, x: 600, y: yStep[parseInt(Math.random() * 3)]
+            })
+        })
+
+        input.addEventListener('keyup', e => {
+            // console.log(e);
+            if (e.keyCode === 13) {
+                button.click()
+            }
+        })
+
+        const canvas = document.querySelector("canvas");
+        // 开启2d的绘制环境
+        const ctx = canvas.getContext("2d");
+        // 设置绘制文字的样式
+        ctx.font = "18px 微软雅黑";
+        // 设置绘制的颜色
+        ctx.fillStyle = "black";
+        // 定义方法 进行弹幕每一帧不同位置的绘制
+        const draw = () => {
+            // console.log(textList);
+            // 每调用一次函数就会x坐标-1 调用频率为 每秒60帧
+            textList.forEach((item) => item.x--);
+            // 利用requestAnimationFrame这个新特性 它可以获取到电脑的分辨率 使绘制动画更丝滑
+            requestAnimationFrame(() => {
+                // 每次绘制的时候都要清除上一次的位置
+                // clearRect 四个值 我们要全屏清除 那么就从左上角开始 然后就是canvas的宽度了 高度随便给一个(因为只用到了前三行)
+                ctx.clearRect(0, 0, 600, 400);
+                // 等会看看不同
+                // 在进行弹幕文字绘制
+                textList.forEach((item) => ctx.fillText(item.text, item.x, item.y));
+            });
+            // 每秒60帧 调用
+            setTimeout(() => {
+                draw();
+            }, 1000 / 60);
+        };
+        draw();
+    </script>
+</body>
+
+</html>

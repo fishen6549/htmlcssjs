@@ -2,7 +2,10 @@ const canvas = document.querySelector('#canvas')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
-const src = './img/timg.jpg'
+
+
+const src = '../public/img/timg.jpg'
+// const src = 'C:\\Users\\Fish\\Desktop\\微信图片_20210421170443.jpg'
 
 const ctx = canvas.getContext('2d')
 
@@ -11,6 +14,7 @@ img.onload = () => {
     // console.log(img);
     // console.log(img.width, img.height);
     // console.dir(img);
+    imgInfo.img = img
     imgInfo.width = img.width
     imgInfo.height = img.height
     imgInfo.originalWidth = img.width
@@ -33,7 +37,8 @@ const statusConfig = {
     NEW_RECT: 3,
     MOVE_RECT: 4,
     RESIZE_RECT: 5,
-    SCALE: 6
+    SCALE: 6,
+    MOVE_CANVAS: 7
 }
 
 const canvasInfo = {
@@ -49,9 +54,12 @@ const canvasInfo = {
     preScale: 1,
     scaleStep: 0.1,
     maxScale: 5,
-    minScale: 0.1
+    minScale: 0.1,
+    minRectWidth: 5,
+    minRectHeight: 5
 }
 const imgInfo = {
+    img: null,
     x: 0,
     y: 0,
     width: 0,
@@ -81,9 +89,13 @@ const fitZoom = (img) => {
     if (canvas.width > canvas.height) {
         imgInfo.width = canvas.height * ratio
         imgInfo.height = canvas.height
+        if (imgInfo.width > canvas.width) {
+            imgInfo.width = canvas.width
+            imgInfo.height = canvas.width / ratio
+        }
     } else {
         imgInfo.width = canvas.width
-        imgInfo.height = canvas.height * ratio
+        imgInfo.height = canvas.width / ratio
     }
     canvasInfo.scale = imgInfo.width / imgInfo.originalWidth
 }
@@ -94,24 +106,47 @@ renderRect = () => {
     for (let i = 0; i < rects.length; i++) {
         drawRect(rects[i])
     }
-
 }
 
-scaleRect = () => {
+render = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(imgInfo.img, 0, 0, imgInfo.originalWidth, imgInfo.originalHeight, imgInfo.x, imgInfo.y, imgInfo.width, imgInfo.height)
     for (let i = 0; i < rects.length; i++) {
-        const rect = rects[i]
-        const realPos = {
-            x: canvasInfo.lastEvtPos.x - rect.x,//图形相对于鼠标的偏移数 
-            y: canvasInfo.lastEvtPos.y - rect.y
-        }
-        const offsetX = realPos.x * (canvasInfo.scale - canvasInfo.preScale) / canvasInfo.preScale
-        const offsetY = realPos.y * (canvasInfo.scale - canvasInfo.preScale) / canvasInfo.preScale
-        rect.x -= offsetX
-        rect.y -= offsetY
-        rect.width = rect.width * (canvasInfo.scale / canvasInfo.preScale)
-        rect.height = rect.height * (canvasInfo.scale / canvasInfo.preScale)
+        drawRect(rects[i])
     }
-    renderRect()
+    stats.update()
+}
+
+scale = () => {
+    for (let i = 0; i < rects.length; i++) {
+        scaleRect(rects[i])
+    }
+    scaleRect(imgInfo)
+}
+
+scaleRect = (shape) => {
+    const realPos = {
+        x: canvasInfo.lastEvtPos.x - shape.x,//图形相对于鼠标的偏移数 
+        y: canvasInfo.lastEvtPos.y - shape.y
+    }
+    const offsetX = realPos.x * (canvasInfo.scale - canvasInfo.preScale) / canvasInfo.preScale
+    const offsetY = realPos.y * (canvasInfo.scale - canvasInfo.preScale) / canvasInfo.preScale
+    shape.x -= offsetX
+    shape.y -= offsetY
+    shape.width = shape.width * (canvasInfo.scale / canvasInfo.preScale)
+    shape.height = shape.height * (canvasInfo.scale / canvasInfo.preScale)
+}
+
+moveCanvas = (deltaX, deltaY) => {
+    // console.log(deltaX, deltaY);
+    for (let i = 0; i < rects.length; i++) {
+        // scaleRect(rects[i])
+        rects[i].x += deltaX
+        rects[i].y += deltaY
+    }
+    imgInfo.x += deltaX
+    imgInfo.y += deltaY
+    // ctx.drawImage(imsgInfo.img, 0, 0, imgInfo.originalWidth, imgInfo.originalHeight, imgInfo.x, imgInfo.y, imgInfo.width, imgInfo.height)
 }
 
 scaleImg = () => {
@@ -129,7 +164,31 @@ scaleImg = () => {
 }
 
 
-
+newRect = (e) => {
+    // const width = Math.abs(e.offsetX - canvasInfo.lastEvtPos.x)
+    // const height = Math.abs(e.offsetY - canvasInfo.lastEvtPos.y)
+    const [x, y, width, height] = [
+        Math.min(canvasInfo.lastEvtPos.x, e.offsetX),
+        Math.min(canvasInfo.lastEvtPos.y, e.offsetY),
+        Math.abs(e.offsetX - canvasInfo.lastEvtPos.x),
+        Math.abs(e.offsetY - canvasInfo.lastEvtPos.y)
+    ]
+    if (width < canvasInfo.minRectWidth || height < canvasInfo.minRectHeight) {
+        return
+    }
+    if (canvasInfo.dragTarget) {
+        canvasInfo.dragTarget.x = x
+        canvasInfo.dragTarget.y = y
+        canvasInfo.dragTarget.width = width
+        canvasInfo.dragTarget.height = height
+    } else {
+        const rect = {
+            x, y, width, height, id: rects.length
+        }
+        rects.push(rect)
+        canvasInfo.dragTarget = rect
+    }
+}
 drawRect = (rect) => {
     ctx.save()
     ctx.beginPath()
@@ -275,25 +334,10 @@ changeCursor = (pos) => {
         }
     }
     document.body.style.cursor = 'auto'
-    // console.log(x, y, width, height)
-    // ctx.save()
-    // ctx.beginPath()
-    // ctx.fillStyle = "blue"
-    // ctx.globalAlpha = 1
-    // ctx.fillRect(tLine[0], tLine[1], tLine[2], tLine[3])
-    // ctx.closePath()
-    // ctx.restore()
 }
 
 
 changeCursor1 = (pos) => {
-    // console.log(pos);
-    // const getPoint = (a, b, step) => [
-    //     a - step,
-    //     a + step,
-    //     a + b - step,
-    //     a + b + step
-    // ]
     if (!canvasInfo.dragTarget) {
         return
     }
@@ -433,20 +477,26 @@ resizeRect = (pos, cursorStr) => {
 
 
 canvas.addEventListener('mousedown', e => {
+    console.log(e);
     const pos = getMousePosition(e)
     canvasInfo.status = statusConfig.DRAG_START
     canvasInfo.lastEvtPos = pos
     canvasInfo.lastEvtOffset = pos
-    canvasInfo.dragTarget = inRect(pos)
-    changeCursor1(pos)
-
-    if (canvasInfo.dragTarget) {
-        canvasInfo.dragType = statusConfig.MOVE_RECT;
-    } else {
-        console.log('NEW_RECT');
-        canvasInfo.dragType = statusConfig.NEW_RECT;
+    if (e.which === 1) {//左键
+        // console.log('left');
+        canvasInfo.dragTarget = inRect(pos)
+        changeCursor1(pos)
+        if (canvasInfo.dragTarget) {
+            canvasInfo.dragType = statusConfig.MOVE_RECT;
+        } else {
+            // console.log('NEW_RECT');
+            canvasInfo.dragType = statusConfig.NEW_RECT;
+        }
+    } else if (e.which === 3) {//右键
+        console.log('right');
+        canvasInfo.dragType = statusConfig.MOVE_CANVAS
     }
-    renderRect()
+    render()
 })
 
 canvas.addEventListener('mousemove', e => {
@@ -460,29 +510,35 @@ canvas.addEventListener('mousemove', e => {
     } else if (canvasInfo.status === statusConfig.DRAG_START) {
         canvasInfo.status = statusConfig.DRAGGING
         canvasInfo.lastEvtOffset = pos
-
     } else if (canvasInfo.status === statusConfig.DRAGGING) {
+        // console.log(canvasInfo.dragType);
         if (canvasInfo.dragType === statusConfig.NEW_RECT) {
-            if (canvasInfo.dragTarget) {
-                canvasInfo.dragTarget.width = e.offsetX - canvasInfo.lastEvtPos.x
-                canvasInfo.dragTarget.height = e.offsetY - canvasInfo.lastEvtPos.y
-            } else {
-                const rect = { x: canvasInfo.lastEvtPos.x, y: canvasInfo.lastEvtPos.y, width: e.offsetX - canvasInfo.lastEvtPos.x, height: e.offsetX - canvasInfo.lastEvtPos.x }
-                rects.push(rect)
-                canvasInfo.dragTarget = rect
-            }
+            newRect(e)
+            // if (canvasInfo.dragTarget) {
+            //     canvasInfo.dragTarget.width = e.offsetX - canvasInfo.lastEvtPos.x
+            //     canvasInfo.dragTarget.height = e.offsetY - canvasInfo.lastEvtPos.y
+            // } else {
+            //     const rect = { x: canvasInfo.lastEvtPos.x, y: canvasInfo.lastEvtPos.y, width: e.offsetX - canvasInfo.lastEvtPos.x, height: e.offsetX - canvasInfo.lastEvtPos.x }
+            //     rects.push(rect)
+            //     canvasInfo.dragTarget = rect
+            // }
         } else if (canvasInfo.dragType === statusConfig.MOVE_RECT || canvasInfo.dragType === statusConfig.RESIZE_RECT) {
             changeCursor1(pos)
             resizeRect(pos, cursorStr)
             canvasInfo.lastEvtOffset = pos;
+        } else if (canvasInfo.dragType === statusConfig.MOVE_CANVAS) {
+            // console.log('开始拖拽画布');
+            moveCanvas(e.offsetX - canvasInfo.lastEvtOffset.x, e.offsetY - canvasInfo.lastEvtOffset.y)
+            canvasInfo.lastEvtOffset = pos;
         }
-        renderRect()
+        // renderRect()
+        render()
     }
 })
 
 canvas.addEventListener('wheel', e => {
     e.preventDefault()
-    console.log(e);
+    // console.log(e);
     canvasInfo.preScale = canvasInfo.scale
     const pos = getMousePosition(e)
     canvasInfo.lastEvtPos = pos
@@ -520,8 +576,8 @@ canvas.addEventListener('wheel', e => {
         // canvasInfo.lastEvtPos = realPos
         // scaleRect()
     }
-    scaleRect()
-    scaleImg()
+    scale()
+    render()
     canvasInfo.status = statusConfig.IDLE
     // ctx.setTransform(canvasInfo.scale, 0, 0, canvasInfo.scale, canvasInfo.offset.x, canvasInfo.offset.y)
     // renderCircle()
@@ -541,4 +597,9 @@ canvas.addEventListener('mouseout', e => {
     if (canvasInfo.status === statusConfig.DRAGGING || canvasInfo.status === statusConfig.IDLE) {
         canvasInfo.status = statusConfig.IDLE
     }
+})
+
+canvas.addEventListener('contextmenu', e => {
+    e.stopPropagation()
+    e.preventDefault()
 })
