@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --main-color: #3d5af1;
+            --main-color-dark: #3651d4;
+            --main-color-light: #5872f5;
+            --text-color: #cfcde7;
+        }
+
+        body {
+            overflow-x: hidden;
+            background-color: #e4e2f5;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            left: 0;
+            /* height: 100vh; */
+            background-color: var(--main-color);
+            padding: 1.8rem .85rem;
+            width: 16rem;
+            transition: width 0.5s ease-in-out;
+        }
+
+        nav:before {
+            content: '';
+            position: absolute;
+            width: 2rem;
+            height: 100%;
+            top: 0;
+            left: 100%;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main h1 {
+            margin-bottom: 1rem;
+        }
+
+        nav .logo {
+            width: 2.1rem;
+            margin: 0 0.8rem;
+        }
+
+        main .copyright {
+            margin-top: auto;
+        }
+
+        main .copyright span {
+            color: var(--main-color);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .sidebar-top {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .shrink-btn {
+            position: absolute;
+            top: 50%;
+            right: -2.7rem;
+            height: 27px;
+            padding: 0 .3rem;
+            background-color: var(--main-color);
+            transform: translateY(-50%) translateX(6px);
+            border-radius: 6px;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            pointer-events: none;
+            transition: all .3s ease;
+            opacity: 0;
+        }
+
+        .shrink-btn i {
+            line-height: 27px;
+            transition: 0.3s;
+        }
+
+        .shrink-btn:hover {
+            /* right: -2rem; */
+            background-color: var(--main-color-dark);
+            opacity: 1;
+        }
+
+        nav:hover .shrink-btn,
+        .shrink-btn.hovered {
+            transform: translateY(-50%) translateX(0px);
+            pointer-events: all;
+            opacity: 1;
+        }
+
+        .hide {
+            color: white;
+            transition: opacity 0.3s 0.3s;
+        }
+
+        body.shrink .hide {
+            opacity: 0;
+            transition-delay: 0s;
+            pointer-events: none;
+        }
+
+        body.shrink nav {
+            width: 5.4rem;
+        }
+
+        body.shrink .shrink-btn i {
+            transform: rotate(-180deg);
+        }
+
+        /* search */
+        .search {
+            min-height: 2.7rem;
+            background-color: var(--main-color-light);
+            margin: 2rem 0.5rem 1.5rem;
+            /* 网格布局 */
+            display: grid;
+            grid-template-columns: 2.7rem 1fr;
+            align-items: center;
+            text-align: center;
+            border-radius: 50px;
+            /* overflow: hidden; */
+        }
+
+        .search i {
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .search input {
+            color: #fff;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: none;
+            caret-color: #fff;
+        }
+
+        .search input::placeholder {
+            color: var(--text-color);
+        }
+
+        /* sidebar-links */
+        .sidebar-links ul {
+            position: relative;
+        }
+
+        .sidebar-links li {
+            position: relative;
+            padding: 2.5px 0;
+        }
+
+
+        .sidebar-links a {
+            color: var(--text-color);
+            font-weight: 400;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            height: 53px;
+        }
+
+
+        .icon {
+            font-size: 1.3rem;
+            text-align: center;
+            min-width: 3.7rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        .icon i {
+            grid-column: 1/2;
+            grid-row: 1/2;
+            transition: all 0.3s;
+        }
+
+        .icon i:last-child {
+            opacity: 0;
+            color: #fff;
+        }
+
+        .sidebar-links a.active,
+        .sidebar-links a:hover {
+            color: #fff;
+        }
+
+        .sidebar-links a .link {
+            transition: color 0.3s;
+        }
+
+        .sidebar-links a.active i:first-child {
+            opacity: 0;
+        }
+
+        .sidebar-links a.active i:last-child {
+            opacity: 1;
+        }
+
+
+        .sidebar-links .active-tab {
+            position: absolute;
+            top: 2.5px;
+            left: 0px;
+            width: 100%;
+            /* a标签height 53px li padding 是 上下2.5px 加起来是58 也可以top 变成2.5px 那么高就变成53就可以*/
+            /* height: 58px; */
+            height: 53px;
+            background-color: var(--main-color-dark);
+            border-radius: 10px;
+            transition: all .2s ease-in-out;
+            /* padding: 2.5px 0; */
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <nav>
+        <div class="sidebar-top">
+            <span class="shrink-btn">
+                <i class="bx bx-chevron-left"></i>
+            </span>
+            <img src="./img/logo.png" class="logo" alt="">
+            <h3 class="hide">Aqumex</h3>
+        </div>
+
+        <div class="search">
+            <i class="bx bx-search"></i>
+            <input type="text" class="hide" placeholder="搜索">
+        </div>
+
+        <div class="sidebar-links">
+            <ul>
+                <div class="active-tab"></div>
+                <li>
+                    <a class="active" href="#" data-active="0">
+                        <div class="icon">
+                            <i class="bx bx-tachometer"></i>
+                            <i class="bx bxs-tachometer"></i>
+                        </div>
+                        <span class="link">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-active="1">
+                        <div class="icon">
+                            <i class="bx bx-folder"></i>
+                            <i class="bx bxs-folder"></i>
+                        </div>
+                        <span class="link">Projects</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-active="2">
+                        <div class="icon">
+                            <i class="bx bx-bar-chart-square"></i>
+                            <i class="bx bxs-bar-chart-square"></i>
+                        </div>
+                        <span class="link">Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-active="3">
+                        <div class="icon">
+                            <i class="bx bx-message-square-detail"></i>
+                            <i class="bx bxs-message-square-detail"></i>
+                        </div>
+                        <span class="link">Message</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <h1>My DashBoard</h1>
+        <p>
+            每一个成功者都有一个开始。勇于开始，才能找到成功的路。
+
+        </p>
+
+        <p class="copyright">
+            &copy; 2021 - <span>Aqumex</span> All Rights Reserved.
+        </p>
+    </main>
+
+
+    <script>
+        const shrink_btn = document.querySelector('.shrink-btn')
+        const search = document.querySelector('.search')
+
+        const sidebar_links = document.querySelectorAll('.sidebar-links a')
+        const active_tab = document.querySelector('.active-tab')
+
+        shrink_btn.addEventListener('click', () => {
+            document.body.classList.toggle('shrink')
+
+            shrink_btn.classList.add('hovered')
+            setTimeout(() => {
+                shrink_btn.classList.remove('hovered')
+            }, 500);
+        })
+
+        search.addEventListener('click', () => {
+            document.body.classList.remove('shrink')
+            search.lastElementChild.focus()
+        })
+
+        sidebar_links.forEach(link => {
+            // 使用箭头函数 this对象是window
+            // link.addEventListener('click',()=> {
+            //     console.log(this);
+            //     console.log(this.dataset.active);
+            // })
+            // 匿名函数就是点击的元素
+            link.addEventListener('click', function () {
+                // console.log(this);
+                // console.log(this.dataset.active);
+
+                sidebar_links.forEach(link => {
+                    link.classList.remove('active')
+                })
+                this.classList.add('active')
+                active_tab.style.top = this.dataset.active * 58 + 2.5 + 'px'
+            })
+        })
+    </script>
+</body>
+
+</html>
