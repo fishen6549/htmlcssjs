@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- https://www.bilibili.com/video/BV1hU4y1A7Q9?spm_id_from=333.999.0.0 -->
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- https://www.youtube.com/watch?v=_uDPd5p_qMc
+    作者：True Coder
+    代码：https://github.com/sefyudem/css-sidebar-menu
+    标题：Animated Sidebar Menu Using HTML & CSS & JavaScript | Responsive Dashboard Side Navigation Bar -->
+    <!-- https://www.bilibili.com/video/BV1hU4y1A7Q9?spm_id_from=333.999.0.0 -->
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
         *,
@@ -47,6 +53,10 @@
             padding: 1.8rem .85rem;
             width: 16rem;
             transition: width 0.5s ease-in-out;
+
+            /* sidebar-footer 使用下面才使得margin-top auto生效 */
+            display: flex;
+            flex-direction: column;
         }
 
         nav:before {
@@ -144,6 +154,24 @@
             transform: rotate(-180deg);
         }
 
+        body.shrink .sidebar-links h4 {
+            height: 10px;
+        }
+
+        body.shrink .account {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        body.shrink .admin-profile {
+            max-width: 0;
+            transition: opacity 0.3s 0s, max-width 0.7s 0s ease-in-out;
+        }
+
+        body.shrink .tooltip {
+            display: grid;
+        }
+
         /* search */
         .search {
             min-height: 2.7rem;
@@ -223,7 +251,7 @@
         }
 
         .sidebar-links a .link {
-            transition: color 0.3s;
+            transition: all 0.3s 0.3s;
         }
 
         .sidebar-links a.active i:first-child {
@@ -248,6 +276,152 @@
             transition: all .2s ease-in-out;
             /* padding: 2.5px 0; */
         }
+
+        .sidebar-links h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 0 0.8rem;
+            height: 45px;
+            line-height: 45px;
+            letter-spacing: 0.5px;
+            color: var(--text-color);
+            transition: opacity 0.3s 0.2s, height 0.5s 0s;
+        }
+
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .account {
+            /* background-color: red; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 3.7rem;
+            height: 53px;
+            color: var(--text-color);
+            font-weight: 400;
+            font-size: 1.3rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: color .3s, opacity .3s .2s;
+        }
+
+        .account:hover {
+            color: #fff;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+        }
+
+        .admin-user img {
+            /* width: 45px; */
+            width: 2.9rem;
+            margin: 0 0.4rem;
+            border-radius: 50%;
+        }
+
+        .admin-user .log-out {
+            color: var(--text-color);
+            transition: color .3s;
+        }
+
+        .admin-user .log-out:hover {
+            color: #fff;
+        }
+
+        .admin-profile {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            max-width: 100%;
+            /* 过渡生效得设置好宽度才行 */
+            transition: opacity 0.3s, max-width 0.7s ease-in-out;
+            /* 重要 过渡会显得正常 */
+            overflow: hidden;
+        }
+
+        .admin-info {
+            margin-left: 0.3rem;
+            white-space: nowrap;
+        }
+
+        .admin-info h3 {
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .admin-info h5 {
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: var(--text-color);
+        }
+
+        .log-out {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 2.4rem;
+            height: 40px;
+            font-size: 1.15rem;
+            color: var(--text-color);
+            background-color: var(--main-color-dark);
+            border-radius: 10px;
+            margin: 0 0.65rem;
+        }
+
+        /* 
+            transform 百分比移动自身的宽度 自身的宽度变化 
+            则移动的距离也会产生变化
+             display: grid;下方的写法把几个span标签堆叠在一起
+        */
+        .tooltip {
+            position: absolute;
+            top: 14px;
+            right: -1.2rem;
+            transform: translateX(100%);
+            color: white;
+            font-size: 0.85rem;
+            padding: 0 0.8rem;
+            background-color: var(--main-color);
+            display: none;
+            grid-template-rows: 1fr;
+            grid-template-columns: 1fr;
+            height: 30px;
+            align-items: center;
+            border-radius: 7px;
+            box-shadow: 0 3px 10px -3px rgba(70, 46, 118, 0.3);
+            opacity: 0;
+            transition: all 0.3s;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .tooltip span {
+            grid-row: 1/2;
+            grid-column: 1/2;
+            /* 文字变换过渡 */
+            transition: 0.3s;
+            opacity: 0;
+
+        }
+
+        .tooltip span.show {
+            opacity: 1;
+        }
+
+        .tooltip-element:hover~.tooltip {
+            opacity: 1;
+        }
+
+        .sidebar-footer {
+            position: relative;
+        }
     </style>
 
 
@@ -271,44 +445,115 @@
         <div class="sidebar-links">
             <ul>
                 <div class="active-tab"></div>
-                <li>
+                <li class="tooltip-element" data-index="0">
                     <a class="active" href="#" data-active="0">
                         <div class="icon">
                             <i class="bx bx-tachometer"></i>
                             <i class="bx bxs-tachometer"></i>
                         </div>
-                        <span class="link">Dashboard</span>
+                        <span class="link hide">Dashboard</span>
                     </a>
                 </li>
-                <li>
+                <li class="tooltip-element" data-index="1">
                     <a href="#" data-active="1">
                         <div class="icon">
                             <i class="bx bx-folder"></i>
                             <i class="bx bxs-folder"></i>
                         </div>
-                        <span class="link">Projects</span>
+                        <span class="link hide">Projects</span>
                     </a>
                 </li>
-                <li>
+                <li class="tooltip-element" data-index="2">
                     <a href="#" data-active="2">
                         <div class="icon">
                             <i class="bx bx-bar-chart-square"></i>
                             <i class="bx bxs-bar-chart-square"></i>
                         </div>
-                        <span class="link">Analytics</span>
+                        <span class="link hide">Analytics</span>
                     </a>
                 </li>
-                <li>
+                <li class="tooltip-element" data-index="3">
                     <a href="#" data-active="3">
                         <div class="icon">
                             <i class="bx bx-message-square-detail"></i>
                             <i class="bx bxs-message-square-detail"></i>
                         </div>
-                        <span class="link">Message</span>
+                        <span class="link hide">Message</span>
                     </a>
                 </li>
+                <div class="tooltip">
+                    <span class="show">Dashboard</span>
+                    <span>Projects</span>
+                    <span>Analytics</span>
+                    <span>Message</span>
+                </div>
+            </ul>
+            <!-- </div> -->
+            <h4 class="hide">Shortcuts</h4>
+
+            <!-- <div class="sidebar-links"> -->
+            <ul>
+                <li class="tooltip-element" data-index="0">
+                    <a class="active" href="#" data-active="4">
+                        <div class="icon">
+                            <i class="bx bx-notepad"></i>
+                            <i class="bx bxs-notepad"></i>
+                        </div>
+                        <span class="link hide">Tasks</span>
+                    </a>
+                </li>
+                <li class="tooltip-element" data-index="1">
+                    <a href="#" data-active="5">
+                        <div class="icon">
+                            <i class="bx bx-help-circle"></i>
+                            <i class="bx bxs-help-circle"></i>
+                        </div>
+                        <span class="link hide">Help</span>
+                    </a>
+                </li>
+                <li class="tooltip-element" data-index="2">
+                    <a href="#" data-active="6">
+                        <div class="icon">
+                            <i class="bx bx-cog"></i>
+                            <i class="bx bxs-cog"></i>
+                        </div>
+                        <span class="link hide">Settings</span>
+                    </a>
+                </li>
+
+                <div class="tooltip">
+                    <span class="show">Tasks</span>
+                    <span>Help</span>
+                    <span>Settings</span>
+                </div>
             </ul>
         </div>
+
+
+        <div class="sidebar-footer">
+            <a href="#" class="account tooltip-element" data-index="0">
+                <i class='bx bx-user'></i>
+            </a>
+            <div class="admin-user tooltip-element" data-index="1">
+                <!-- 用户介绍 -->
+                <div class="admin-profile hide">
+                    <img src="./img/face-1.png" alt="">
+                    <div class="admin-info">
+                        <h3>John Doe</h3>
+                        <h5>Admin</h5>
+                    </div>
+                </div>
+                <!-- 退出图标 -->
+                <a href="#" class="log-out">
+                    <i class='bx bx-log-out'></i>
+                </a>
+            </div>
+            <div class="tooltip">
+                <span class="show">John Doe</span>
+                <span>Logout</span>
+            </div>
+        </div>
+
     </nav>
     <main>
         <h1>My DashBoard</h1>
@@ -330,9 +575,15 @@
         const sidebar_links = document.querySelectorAll('.sidebar-links a')
         const active_tab = document.querySelector('.active-tab')
 
+        const h4 = document.querySelector('.sidebar-links h4')
+        const tooltip_elements = document.querySelectorAll('.tooltip-element')
+
         shrink_btn.addEventListener('click', () => {
             document.body.classList.toggle('shrink')
-
+            setTimeout(() => {
+                // 伸缩的时候h4标签高度会缩小 activeTab位置就错了 所以就需要重新计算
+                moveActiveTab()
+            }, 400);
             shrink_btn.classList.add('hovered')
             setTimeout(() => {
                 shrink_btn.classList.remove('hovered')
@@ -344,23 +595,46 @@
             search.lastElementChild.focus()
         })
 
-        sidebar_links.forEach(link => {
-            // 使用箭头函数 this对象是window
-            // link.addEventListener('click',()=> {
-            //     console.log(this);
-            //     console.log(this.dataset.active);
-            // })
-            // 匿名函数就是点击的元素
-            link.addEventListener('click', function () {
-                // console.log(this);
-                // console.log(this.dataset.active);
 
-                sidebar_links.forEach(link => {
-                    link.classList.remove('active')
-                })
-                this.classList.add('active')
-                active_tab.style.top = this.dataset.active * 58 + 2.5 + 'px'
+        let activeIndex;
+        function changeLink() {
+            sidebar_links.forEach(link => {
+                link.classList.remove('active')
             })
+            this.classList.add('active')
+            // console.log(Object.prototype.toString.apply(this.dataset.active));[object String]
+            // console.log(typeof this.dataset.active); string
+            activeIndex = +this.dataset.active
+            moveActiveTab()
+        }
+
+
+        function moveActiveTab() {
+            let topPosition = activeIndex * 58 + 2.5
+            if (activeIndex > 3) {
+                topPosition += h4.clientHeight
+            }
+            active_tab.style.top = topPosition + 'px'
+        }
+
+        sidebar_links.forEach(link => {
+            link.addEventListener('click', changeLink)
+        })
+
+        function showToolTip() {
+            // console.log(this.dataset.index);
+            const tooltips = this.parentNode.lastElementChild;
+            let spans = tooltips.children;
+            // console.log(spans);
+            Array.from(spans).forEach(s => s.classList.remove('show'));
+            let index = this.dataset.index;
+            spans[index].classList.add('show');
+            tooltips.style.top = index * 58 + 14 + 'px';
+        }
+
+        Array.from(tooltip_elements).forEach(item => {
+            // item.addEventListener('mouseover',showToolTip)
+            item.addEventListener('mouseover', showToolTip)
         })
     </script>
 </body>

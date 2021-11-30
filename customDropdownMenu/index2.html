@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            min-height: 100vh;
+            /* background-color: #fafafa; */
+            background-color: #f1f3f4;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .dropDown {
+            margin: 200px 0;
+            position: relative;
+            width: 250px;
+            height: 32px;
+            
+        }
+
+        
+
+        .dropDown::before {
+            content: '';
+            position: absolute;
+            z-index: 999;
+            top: 8px;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            /* border: 3px solid black; */
+
+            border-right: 2px solid #888;
+            border-bottom: 2px solid #888;
+            transform: rotate(45deg);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dropDown.active .options {
+            /* display: block; */
+            opacity: 1;
+            transform: scaleY(1);
+        }
+
+        .dropDown.active::before{
+            top: 12px;
+            transform: rotate(225deg);
+        }
+
+        .input {
+            position: absolute;
+            width: 100%;
+            height: 32px;
+            outline: none;
+            border: none;
+            padding-left: 15px;
+            border-radius: 6px;
+            box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+        }
+
+        .options {
+            position: absolute;
+            width: 100%;
+            /* margin-top: 10px; */
+            top: 45px;
+            background-color: #fff;
+            border-radius: 6px;
+            box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            /* display: none; */
+            opacity: 0;
+            transform: scaleY(0);
+            transform-origin: top center;
+        }
+
+        .options .item {
+            height: 32px;
+            padding-left: 15px;
+            line-height: 32px;
+            transition: 0.1s;
+        }
+
+        .options .item:hover {
+            background-color: rgb(99, 186, 235);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .options .item i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dropDown">
+        <input class="input" type="text" placeholder="DropDownMenu" readonly>
+        <ul class="options">
+            <li class="item" onclick="show('Javascript')"><i class='bx bxl-html5'></i><span>Javascript</span></li>
+            <li class="item" onclick="show('Html')"><i class='bx bxl-javascript'></i><span>Html</span></li>
+            <li class="item" onclick="show('css')"><i class='bx bxl-css3'></i><span>css</span></li>
+            <li class="item" onclick="show('Vue')"><i class='bx bxl-vuejs'></i><span>Vue</span></li>
+            <li class="item" onclick="show('React')"><i class='bx bxl-react'></i><span>React</span></li>
+        </ul>
+    </div>
+    <!-- <div>123123123</div> -->
+
+    <script>
+        function show(value){
+            document.querySelector('.input').value = value;
+        }
+        let dropDown = document.querySelector('.dropDown')
+        // document.querySelector('.dropDown').classList.toggle('active');
+
+        dropDown.onclick = function(){
+            dropDown.classList.toggle('active');
+        }
+
+    </script>
+</body>
+
+</html>
